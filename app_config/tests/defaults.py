@@ -265,7 +265,7 @@ DEFAULT_CONFIG = {
 JSON_TEST_FILE = {
     'TRUE': True,
     'False': False,
-    'null': None,
+#   'null': None,
     'list': [1, '2', 'three'],
     'dict': {'foo': 'bar'},
 }
@@ -282,12 +282,6 @@ YML_TEST_FILE = {
     'dict': {'boo': 'far'},
 }
 
-# We group them together for ease later
-TEST_FILES = [
-    JSON_TEST_FILE,
-    YAML_TEST_FILE,
-    YML_TEST_FILE,
-]
 
 # Extract these keys/attr from the option parser object
 LIST_OF_OPTS_TO_EXTRACT = [
@@ -315,4 +309,16 @@ DEFAULT_WITH_OPTS_EXPECTED = {
 #    'BAZ-BAQ': '9',
 #}
 
-
+DEFAULT_WITH_FILE_LOAD_EXPECTED = {
+    'TRUE': True,
+    'False': False,
+#   'null': None,
+    'list': [1, '2', 'three'],
+    '_list': ['my', 'list', 'todo'],
+    'dict': {
+        'foo': 'bar',
+        'boo': 'far'
+    },
+    'YAML': 'file',
+    'YML': 'short',
+}
