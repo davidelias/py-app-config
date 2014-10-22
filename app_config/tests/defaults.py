@@ -322,3 +322,23 @@ DEFAULT_WITH_FILE_LOAD_EXPECTED = {
     'YAML': 'file',
     'YML': 'short',
 }
+
+RUNTIME_CONFIG = {
+    'RUN': 'TIMe',
+    'con': 'fig',
+}
+
+EXAMPLE_CONFIG_EXPECTED = {
+    'opt': 2937,
+    'c_d': True,
+    'foobar': 'raboof',
+    'fod': 'der',
+    'qua_foo': 'pook',
+    'cod': False,
+    'Key': 'value',
+    'quaaaa': 'aaaauq',
+}
+
+# the dict we expect is the example config plus this runtime dictionary
+RUNTIME_CONFIG_EXPECTED = EXAMPLE_CONFIG_EXPECTED
+RUNTIME_CONFIG_EXPECTED.update(RUNTIME_CONFIG)

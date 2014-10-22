@@ -24,12 +24,12 @@ try:
 except ImportError:
     import mock
 
-from app_config.base import ConfigBase
+from app_config.base import ConfigBase as _ConfigBase
 from app_config.tests.defaults import *
+
 
 logger = logging.getLogger('ConfigBase tests')
 logger.setLevel('DEBUG')
-
 
 def _write_file(data, fpath=None, format='yaml'):
     '''
@@ -82,21 +82,28 @@ def _setup_temporary_files():
     return tlist
 
 
-class ConfigWithDefaults(ConfigBase):
+class TestConfig(_ConfigBase):
+    '''
+    Subclass ``ConfigBase`` to add a logger for testing
+
+    '''
+    logger = logger
+
+class ConfigWithDefaults(TestConfig):
     '''
     Subclass ``ConfigBase`` to test use of defaults functionality
     '''
     _defaults = DEFAULT_CONFIG
 
 
-class ConfigWithDefaultOpts(ConfigBase):
+class ConfigWithDefaultOpts(TestConfig):
     '''
     Subclass ``ConfigBase`` to test use of default opts to extract
     '''
     _opts_list = LIST_OF_OPTS_TO_EXTRACT
 
 
-class ConfigWithDefaultEnv(ConfigBase):
+class ConfigWithDefaultEnv(TestConfig):
     '''
     Subclass ``ConfigBase`` to test use of retrieving specific environment
     variables/keys as part of init.
@@ -104,7 +111,7 @@ class ConfigWithDefaultEnv(ConfigBase):
     _env_keys = ENV_KEYS_TO_EXTRACT
  
 
-class ExampleConfig(ConfigBase):
+class ExampleConfig(TestConfig):
     '''
     '''
     _defaults = DEFAULT_CONFIG
@@ -131,7 +138,7 @@ class TestConfigBase(unittest.TestCase):
 
     def test_init_config_empty(self):
         print 'ConfigBase test #1'
-        c = ConfigBase()
+        c = TestConfig()
         self.assertEqual(c, {})
 
     def test_init_config_with_defaults(self):
@@ -154,7 +161,7 @@ class TestConfigBase(unittest.TestCase):
         # we define this class here because we did not know the location of the
         # temporary files before setUp(), and because we don't need it in the
         # other tests.
-        class ConfigWithDefaultFiles(ConfigBase):
+        class ConfigWithDefaultFiles(TestConfig):
             '''
             Subclass ``ConfigBase`` to test use of default files to load
             '''
@@ -203,6 +210,11 @@ class TestConfigBase(unittest.TestCase):
         saved = json.load(open(tmpfile.name, 'r'))
         # confirm that the file we've written is valid and matches the config
         self.assertSequenceEqual(saved, c)
+
+    def test_init_with_runtime(self):
+        print 'ConfigBase test #9'
+        c = ExampleConfig(RUNTIME_CONFIG)
+        self.assertSequenceEqual(c, RUNTIME_CONFIG_EXPECTED)
 
 
 if __name__ == '__main__':
