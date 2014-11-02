@@ -144,6 +144,8 @@ class ConfigBase(UserDict.UserDict):
     _filelist = []
     # a place to stash a logging.logger instance we can rely on internally
     logger = None
+    # flag to enable SUPER verbose debug
+    _vvv = False
 
 
     def __init__(self, rt={}, opts=None, lgr=None, files=[], *args, **kwargs):
@@ -267,7 +269,8 @@ class ConfigBase(UserDict.UserDict):
         Merge the dictionary provided ``data``, into ``self.data``.
 
         '''
-        self.logger.debug('merging %s into %s' % (data, self.data))
+        if self._vvv:
+            self.logger.debug('merging %s into %s' % (data, self.data))
         self.data = _merge(self.data, data)
 
 
