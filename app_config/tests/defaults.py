@@ -309,7 +309,7 @@ DEFAULT_WITH_OPTS_EXPECTED = {
 #    'BAZ-BAQ': '9',
 #}
 
-DEFAULT_WITH_FILE_LOAD_EXPECTED = {
+DEFAULT_WITH_FILE_LOAD_AND_MERGE_ALL_EXPECTED = {
     'TRUE': True,
     'False': False,
 #   'null': None,
@@ -322,6 +322,16 @@ DEFAULT_WITH_FILE_LOAD_EXPECTED = {
     'YAML': 'file',
     'YML': 'short',
 }
+
+
+DEFAULT_FILE_LOAD_MERGE_FIRST_FOUND_EXPECTED = {
+    'TRUE': True,
+    'False': False,
+#   'null': None,
+    'list': [1, '2', 'three'],
+    'dict': {'foo': 'bar'},
+}
+
 
 RUNTIME_CONFIG = {
     'RUN': 'TIMe',

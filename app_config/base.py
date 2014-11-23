@@ -142,6 +142,8 @@ class ConfigBase(UserDict.UserDict):
     _defaults = {}
     # list of files to load YAML config from
     _filelist = []
+    # specify whether we merge all files found, or only load the first found
+    _merge_all_files = False
     # a place to stash a logging.logger instance we can rely on internally
     logger = None
     # flag to enable SUPER verbose debug
@@ -220,10 +222,22 @@ class ConfigBase(UserDict.UserDict):
         is parsed as either YAML or JSON based on the file extension.
 
         '''
-        data = {}
-        for config in self._filelist:
-            data = _merge(data, self._load_file(config))
-        return data
+        def _load_and_merge(self):
+            data = {}
+            for config in self._filelist:
+                data =  _merge(data, self._load_file(config))
+            return data
+        def _load_first_found(self):
+            for config in self._filelist:
+                if os.path.exists(config):
+                    return _merge({}, self._load_file(config))
+            return {}
+
+        if self._merge_all_files:
+            data = _load_and_merge(self)
+        else:
+            data = _load_first_found(self)
+        return data or {}
 
 
     def _load_file(self, fpath):

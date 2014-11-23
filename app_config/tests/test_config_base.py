@@ -109,7 +109,7 @@ class ConfigWithDefaultEnv(TestConfig):
     variables/keys as part of init.
     '''
     _env_keys = ENV_KEYS_TO_EXTRACT
- 
+
 
 class ExampleConfig(TestConfig):
     '''
@@ -144,32 +144,60 @@ class TestConfigBase(unittest.TestCase):
     def test_init_config_with_defaults(self):
         print 'ConfigBase test #2'
         c = ConfigWithDefaults()
-        self.assertSequenceEqual(c, DEFAULT_CONFIG_EXPECTED) 
+        self.assertSequenceEqual(c, DEFAULT_CONFIG_EXPECTED)
 
     def test_init_config_with_opts_extract(self):
         print 'ConfigBase test #3'
         c = ConfigWithDefaultOpts(opts=TEST_OPTS_DICT)
-        self.assertSequenceEqual(c, DEFAULT_WITH_OPTS_EXPECTED) 
+        self.assertSequenceEqual(c, DEFAULT_WITH_OPTS_EXPECTED)
 
     def test_init_config_with_env_extract(self):
         print 'ConfigBase test #4'
         c = ConfigWithDefaultEnv()
-        self.assertSequenceEqual(c, DEFAULT_WITH_ENV_EXPECTED) 
+        self.assertSequenceEqual(c, DEFAULT_WITH_ENV_EXPECTED)
 
-    def test_init_config_with_file_load(self):
-        print 'ConfigBase test #5'
+    def test_init_config_with_file_load_and_merge_all(self):
+        print 'ConfigBase test #5a'
         # we define this class here because we did not know the location of the
         # temporary files before setUp(), and because we don't need it in the
         # other tests.
-        class ConfigWithDefaultFiles(TestConfig):
+        class ConfigWithDefaultFilesMergeAll(TestConfig):
             '''
-            Subclass ``ConfigBase`` to test use of default files to load
+            Subclass ``TestConfig`` to test loading default files with
+            `_merge_all_files` enabled.
+
             '''
             # generate the list of files to load, based on setUp() gave us
             _filelist = [t.name for t in self._tmp]
+            # enable merge all files on load, rather than load first found
+            _merge_all_files = True
+
         # the actual test
-        c = ConfigWithDefaultFiles()
-        self.assertSequenceEqual(c, DEFAULT_WITH_FILE_LOAD_EXPECTED)
+        c = ConfigWithDefaultFilesMergeAll()
+        self.assertSequenceEqual(c, DEFAULT_WITH_FILE_LOAD_AND_MERGE_ALL_EXPECTED)
+
+
+    def test_init_config_with_file_load_and_merge_first_found(self):
+        print 'ConfigBase test #5b'
+        # we define this class here because we did not know the location of the
+        # temporary files before setUp(), and because we don't need it in the
+        # other tests.
+        class ConfigWithDefaultFilesMergeFirstFound(TestConfig):
+            '''
+            Subclass ``TestConfig`` to test loading default files with
+            `_merge_all_files` disabled. Only load the file that is accessible
+            first.
+
+            '''
+            # generate the list of files to load, based on setUp() gave us
+            _filelist = [t.name for t in self._tmp]
+            # disable merge all files on load, load first found
+        _merge_all_files = False
+
+        # the actual test
+        c = ConfigWithDefaultFilesMergeFirstFound()
+        self.assertSequenceEqual(c, DEFAULT_FILE_LOAD_MERGE_FIRST_FOUND_EXPECTED)
+
 
     def test_save_config_default_filetype(self):
         print 'ConfigBase test #6'
