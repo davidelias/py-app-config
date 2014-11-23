@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>py-app-config &mdash; py-app-config 0.0.2 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="py-app-config 0.0.2 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">py-app-config 0.0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="py-app-config">
+<h1>py-app-config<a class="headerlink" href="#py-app-config" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-app_config.base"></span><p>The opinionated config object for Python applications</p>
+<dl class="class">
+<dt id="app_config.base.ConfigBase">
+<em class="property">class </em><tt class="descclassname">app_config.base.</tt><tt class="descname">ConfigBase</tt><big>(</big><em>rt={}</em>, <em>opts=None</em>, <em>lgr=None</em>, <em>files=[]</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class that provides a meaningful (opinionated) foundation to build an
+object suitable for all of an Application&#8217;s configuration. It is meant to be
+dict-like in nature, subclassing <tt class="docutils literal"><span class="pre">UserDict.UserDict</span></tt>.</p>
+<p>Current Bugs:</p>
+<blockquote>
+<div><ul class="simple">
+<li>we don&#8217;t normalize keys retrieved from JSON/YAML files</li>
+<li>it would be awesome to enable/disable normalizing keys</li>
+<li>specifying the files to load is cumbersome, incomplete, imperfect.</li>
+<li>we ought to print out more info about the Exception encountered when
+handling files.</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="app_config.base.ConfigBase._init_logger">
+<tt class="descname">_init_logger</tt><big>(</big><em>lgr=None</em><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase._init_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a logger the config instance can rely on. Set <tt class="docutils literal"><span class="pre">self.logger</span></tt>
+to <tt class="docutils literal"><span class="pre">lgr</span></tt> if provided, or setup our own. For now, we default to enabling
+debug mode when providing our own. Maybe in the future we&#8217;ll use an env
+variable or something sneaky like that.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app_config.base.ConfigBase._load_file">
+<tt class="descname">_load_file</tt><big>(</big><em>fpath</em><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase._load_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provided the full file path to a file, <tt class="docutils literal"><span class="pre">fpath</span></tt>, attempt to load and
+parse this file as either YAML or JSON. Return the result as a
+dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app_config.base.ConfigBase._load_files">
+<tt class="descname">_load_files</tt><big>(</big><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase._load_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using the list of file paths provided by <tt class="docutils literal"><span class="pre">self._filelist</span></tt>, look up each
+file to be loaded, parsed to a dictionary, and merged together. The file
+is parsed as either YAML or JSON based on the file extension.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app_config.base.ConfigBase._parse_env">
+<tt class="descname">_parse_env</tt><big>(</big><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase._parse_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using the list of keys provided by <tt class="docutils literal"><span class="pre">self._env_keys</span></tt>, attempt to
+retrieve each key from the shell environment. Returns the dictionary
+compiled out of the keys retrieved.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app_config.base.ConfigBase._parse_opts">
+<tt class="descname">_parse_opts</tt><big>(</big><em>opts</em><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase._parse_opts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provided an <tt class="docutils literal"><span class="pre">OptionParser</span></tt>-like object <tt class="docutils literal"><span class="pre">opts</span></tt>, use the list of
+attributes defined in <tt class="docutils literal"><span class="pre">self._opts_list</span></tt> to extract a specific list of
+keys. Use <tt class="docutils literal"><span class="pre">_get_opts()</span></tt> to retrieve the key, or None. Generate a
+dictionary with these extracted keys and return the result. Use
+<tt class="docutils literal"><span class="pre">_remove_empty_keys()</span></tt> to ensure the result is concise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app_config.base.ConfigBase.load_from">
+<tt class="descname">load_from</tt><big>(</big><em>fl=[]</em><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase.load_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provided a list of filesystem paths, update <tt class="docutils literal"><span class="pre">self._filelist</span></tt> and load
+these files into the configuration dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app_config.base.ConfigBase.merge">
+<tt class="descname">merge</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge the dictionary provided <tt class="docutils literal"><span class="pre">data</span></tt>, into <tt class="docutils literal"><span class="pre">self.data</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app_config.base.ConfigBase.save">
+<tt class="descname">save</tt><big>(</big><em>fpath=None</em><big>)</big><a class="headerlink" href="#app_config.base.ConfigBase.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <tt class="docutils literal"><span class="pre">fpath</span></tt> is provided, update <tt class="docutils literal"><span class="pre">self.file_path</span></tt> and attempt to write
+out the contents of the config dictionary to that file. Returns <tt class="docutils literal"><span class="pre">True</span></tt>
+on success and <tt class="docutils literal"><span class="pre">False</span></tt> if there is an Exception in opening or dumping
+data to the file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.base._dash_to_underscore">
+<tt class="descclassname">app_config.base.</tt><tt class="descname">_dash_to_underscore</tt><big>(</big><em>items</em><big>)</big><a class="headerlink" href="#app_config.base._dash_to_underscore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new dictionary with renamed keys. All occurances of &#8216;-&#8216; are
+replaced with &#8216;_&#8217;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.base._get_keys_from_env">
+<tt class="descclassname">app_config.base.</tt><tt class="descname">_get_keys_from_env</tt><big>(</big><em>keys=[]</em><big>)</big><a class="headerlink" href="#app_config.base._get_keys_from_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a dictionary of key/value pairs using the list of <tt class="docutils literal"><span class="pre">keys</span></tt>
+provided and <tt class="docutils literal"><span class="pre">os.environ.get()</span></tt> to retrieve the key from the shell
+environment.</p>
+<p>Use <tt class="docutils literal"><span class="pre">_remove_empty_keys()</span></tt> to ensure there are no empty keys</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.base._get_opt">
+<tt class="descclassname">app_config.base.</tt><tt class="descname">_get_opt</tt><big>(</big><em>opts=None</em>, <em>key=None</em><big>)</big><a class="headerlink" href="#app_config.base._get_opt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to retrieve the named option, Returns None if not found or an
+exception is thrown.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.base._lowercase_keys">
+<tt class="descclassname">app_config.base.</tt><tt class="descname">_lowercase_keys</tt><big>(</big><em>items</em><big>)</big><a class="headerlink" href="#app_config.base._lowercase_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new dictionary with renamed keys. All keys are ensured to be
+lower-cased.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.base._merge">
+<tt class="descclassname">app_config.base.</tt><tt class="descname">_merge</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#app_config.base._merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>merge the contents of dictionary <tt class="docutils literal"><span class="pre">b</span></tt> into dictionary <tt class="docutils literal"><span class="pre">a</span></tt>, using reclass&#8217;
+sensible form of deep-dictionary merging and interpolation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.base._normalize_keys">
+<tt class="descclassname">app_config.base.</tt><tt class="descname">_normalize_keys</tt><big>(</big><em>items</em><big>)</big><a class="headerlink" href="#app_config.base._normalize_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new dictionary with renamed keys. All occurances of &#8216;-&#8216; are
+replaced with &#8216;_&#8217;, and all keys are lowercased.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.base._remove_empty_keys">
+<tt class="descclassname">app_config.base.</tt><tt class="descname">_remove_empty_keys</tt><big>(</big><em>d={}</em><big>)</big><a class="headerlink" href="#app_config.base._remove_empty_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary, having deleted (removed) the empty keys.</p>
+</dd></dl>
+
+<span class="target" id="module-app_config.tests"></span><span class="target" id="module-app_config.tests.defaults"></span><p>Default dictionaries, lists, and configuration details for use in testing
+this package.</p>
+<dl class="class">
+<dt id="app_config.tests.defaults.OptParserLikeObject">
+<em class="property">class </em><tt class="descclassname">app_config.tests.defaults.</tt><tt class="descname">OptParserLikeObject</tt><a class="headerlink" href="#app_config.tests.defaults.OptParserLikeObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>An OptionParser-like object for testing attribute access</p>
+</dd></dl>
+
+<span class="target" id="module-app_config.tests.test_config_base"></span><p>Unit tests for the <tt class="docutils literal"><span class="pre">ConfigBase</span></tt> class.</p>
+<dl class="class">
+<dt id="app_config.tests.test_config_base.ConfigWithDefaultEnv">
+<em class="property">class </em><tt class="descclassname">app_config.tests.test_config_base.</tt><tt class="descname">ConfigWithDefaultEnv</tt><big>(</big><em>rt={}</em>, <em>opts=None</em>, <em>lgr=None</em>, <em>files=[]</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app_config.tests.test_config_base.ConfigWithDefaultEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass <tt class="docutils literal"><span class="pre">ConfigBase</span></tt> to test use of retrieving specific environment
+variables/keys as part of init.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app_config.tests.test_config_base.ConfigWithDefaultOpts">
+<em class="property">class </em><tt class="descclassname">app_config.tests.test_config_base.</tt><tt class="descname">ConfigWithDefaultOpts</tt><big>(</big><em>rt={}</em>, <em>opts=None</em>, <em>lgr=None</em>, <em>files=[]</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app_config.tests.test_config_base.ConfigWithDefaultOpts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass <tt class="docutils literal"><span class="pre">ConfigBase</span></tt> to test use of default opts to extract</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app_config.tests.test_config_base.ConfigWithDefaults">
+<em class="property">class </em><tt class="descclassname">app_config.tests.test_config_base.</tt><tt class="descname">ConfigWithDefaults</tt><big>(</big><em>rt={}</em>, <em>opts=None</em>, <em>lgr=None</em>, <em>files=[]</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app_config.tests.test_config_base.ConfigWithDefaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass <tt class="docutils literal"><span class="pre">ConfigBase</span></tt> to test use of defaults functionality</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app_config.tests.test_config_base.ExampleConfig">
+<em class="property">class </em><tt class="descclassname">app_config.tests.test_config_base.</tt><tt class="descname">ExampleConfig</tt><big>(</big><em>rt={}</em>, <em>opts=None</em>, <em>lgr=None</em>, <em>files=[]</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app_config.tests.test_config_base.ExampleConfig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="app_config.tests.test_config_base.TestConfig">
+<em class="property">class </em><tt class="descclassname">app_config.tests.test_config_base.</tt><tt class="descname">TestConfig</tt><big>(</big><em>rt={}</em>, <em>opts=None</em>, <em>lgr=None</em>, <em>files=[]</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app_config.tests.test_config_base.TestConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass <tt class="docutils literal"><span class="pre">ConfigBase</span></tt> to add a logger for testing</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app_config.tests.test_config_base.TestConfigBase">
+<em class="property">class </em><tt class="descclassname">app_config.tests.test_config_base.</tt><tt class="descname">TestConfigBase</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="headerlink" href="#app_config.tests.test_config_base.TestConfigBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test cases for the <tt class="docutils literal"><span class="pre">ConfigBase</span></tt> class, including the following
+functionality:</p>
+<blockquote>
+<div><ul class="simple">
+<li>init the class with no defaults, env, opts, etc, nothing</li>
+<li>init the class with defaults</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.tests.test_config_base._setup_temporary_files">
+<tt class="descclassname">app_config.tests.test_config_base.</tt><tt class="descname">_setup_temporary_files</tt><big>(</big><big>)</big><a class="headerlink" href="#app_config.tests.test_config_base._setup_temporary_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the temporary files needed to run our tests for the <tt class="docutils literal"><span class="pre">ConfigBase</span></tt>
+class. Write to the files to ensure they all exist and have the contents we
+wish to test for.</p>
+<p>Returns the list of <tt class="docutils literal"><span class="pre">tempfile.NamedTemporaryFile</span></tt> objects we create in the
+setup process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app_config.tests.test_config_base._write_file">
+<tt class="descclassname">app_config.tests.test_config_base.</tt><tt class="descname">_write_file</tt><big>(</big><em>data</em>, <em>fpath=None</em>, <em>format='yaml'</em><big>)</big><a class="headerlink" href="#app_config.tests.test_config_base._write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the dictionary <tt class="docutils literal"><span class="pre">data</span></tt> to the file specified by <tt class="docutils literal"><span class="pre">fpath</span></tt>, formatted
+as either <tt class="docutils literal"><span class="pre">json</span></tt> or <tt class="docutils literal"><span class="pre">yaml</span></tt> and specified by <tt class="docutils literal"><span class="pre">format</span></tt>. If <tt class="docutils literal"><span class="pre">format</span></tt> is
+<tt class="docutils literal"><span class="pre">none</span></tt> (no formatting), just dump <tt class="docutils literal"><span class="pre">data</span></tt> as a string to file.write().
+Returns <tt class="docutils literal"><span class="pre">True</span></tt> on success and <tt class="docutils literal"><span class="pre">False</span></tt> if there is an Exception in opening
+or dumping data to the file.</p>
+</dd></dl>
+
+<span class="target" id="module-app_config.tests.test_util_func"></span><p>Tests for the utility functions used internally by the <tt class="docutils literal"><span class="pre">app_config</span></tt> module.</p>
+<dl class="class">
+<dt id="app_config.tests.test_util_func.TestUtilityFunctions">
+<em class="property">class </em><tt class="descclassname">app_config.tests.test_util_func.</tt><tt class="descname">TestUtilityFunctions</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="headerlink" href="#app_config.tests.test_util_func.TestUtilityFunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests for the following functions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">_normalize_keys()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">_dash_to_underscore()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">_lowercase_keys()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">_remove_empty_keys()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">_get_opt()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">_get_keys_from_env()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">_merge()</span></tt></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">py-app-config</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">py-app-config 0.0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
