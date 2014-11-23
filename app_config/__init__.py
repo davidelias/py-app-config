@@ -11,9 +11,9 @@ from .base import ConfigBase
 
 
 NAME = 'app_config'
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 DESC = 'Opinionated configuration object for python applications'
 AUTHOR = 'Contributors'
-EMAIL = ''
-URL = ''
+EMAIL = '@iluminite'
+URL = 'https://github.com/iluminite/python-appconfig'
 LICENSE = 'BSD'
