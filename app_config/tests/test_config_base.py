@@ -27,9 +27,9 @@ except ImportError:
 from app_config.base import ConfigBase as _ConfigBase
 from app_config.tests.defaults import *
 
-
-logger = logging.getLogger('ConfigBase tests')
-logger.setLevel('DEBUG')
+logging.basicConfig(format='%(levelname)s: %(name)s %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def _write_file(data, fpath=None, format='yaml'):
     '''
